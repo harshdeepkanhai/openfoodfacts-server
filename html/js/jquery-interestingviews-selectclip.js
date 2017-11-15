@@ -1,1 +1,1 @@
-/home/off-fr/cgi/jquery-interestingviews-selectclip.js
+d:/home/off-fr/cgi/jquery-interestingviews-selectclip.js

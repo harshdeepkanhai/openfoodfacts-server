@@ -1,1 +1,1 @@
-/home/off-fr/cgi/labels.txt
+d:/home/off-fr/cgi/labels.txt
