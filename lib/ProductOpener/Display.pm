@@ -3304,8 +3304,6 @@ sub display_scatter_plot($$$) {
 					}
 				}
 				
-				defined $series{$seriesid} or $series{$seriesid} = '';
-				
 				# print STDERR "Display::search_and_graph_products: i: $i - axis_x: $graph_ref->{axis_x} - axis_y: $graph_ref->{axis_y}\n";
 					
 				my %data;
@@ -3325,8 +3323,7 @@ sub display_scatter_plot($$$) {
 				$data{url} = $url;
 				$data{img} = display_image_thumb($product_ref, 'front');
 				
-				defined $series{$seriesid} or $series{$seriesid} = '';
-				$series{$seriesid} .= encode_json(\%data) . ',';
+				$series{$seriesid} = \%data;
 				defined $series_n{$seriesid} or $series_n{$seriesid} = 0;
 				$series_n{$seriesid}++;
 				$i++;
@@ -3357,12 +3354,13 @@ JS
 				my $g = $nutrition_grades_colors{$nutrition_grade}{g};
 				my $b = $nutrition_grades_colors{$nutrition_grade}{b};
 				my $seriesid = $nutrition_grade;
+				my $json_data = JSON::PP->new->encode($series{$seriesid});
 				$series_data .= <<JS				
 {
 	name: '$title : $series_n{$seriesid} $Lang{products_p}{$lc}',
 	color: 'rgba($r, $g, $b, .9)',
 	turboThreshold : 0,
-	data: [ $series{$seriesid} ]
+	data: [ $json_data ]
 },
 JS
 ;				
@@ -3402,12 +3400,14 @@ JS
 				$g = int ($g / $matching_series);
 				$b = int ($b / $matching_series);
 				
+				my $json_data = JSON::PP->new->encode($series{$seriesid});
+
 				$series_data .= <<JS
 {
 	name: '$title : $series_n{$seriesid} $Lang{products_p}{$lc}',
 	color: 'rgba($r, $g, $b, .9)',
 	turboThreshold : 0,
-	data: [ $series{$seriesid} ]
+	data: [ $json_data ]
 },
 JS
 ;
